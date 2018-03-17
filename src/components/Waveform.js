@@ -7,6 +7,7 @@ import {
   CUSTOMER_Y,
   HEIGHT,
   DIVIDER,
+  FRAME_EQUALIZER,
   MARKER_START_Y,
   MARKER_END_Y
 } from '../utils/constants';
@@ -64,6 +65,8 @@ class Waveform extends Component {
   }
 
   init() {
+    const { onCanvasClick } = this.props;
+
     const draw = this.draw;
     const getCanvasWidth = this.getCanvasWidth;
     const setCanvasWidth = this.setCanvasWidth;
@@ -72,7 +75,7 @@ class Waveform extends Component {
     let canvasWidth = this.getCanvasWidth();
     let markerX = this.getMarkerXPosition(canvasWidth);
 
-    window.isPaused = false;
+    let isPaused = false;
     let i = 0;
     let requestId;
 
@@ -85,8 +88,7 @@ class Waveform extends Component {
       if (i < 1863 / DIVIDER) {
         draw(i, markerX);
 
-        // TODO: make 16 a constant of some sort
-        i += DIVIDER / 16;
+        i += DIVIDER / FRAME_EQUALIZER;
       } else {
         cancelAnimationFrame(requestId);
       }
@@ -94,9 +96,11 @@ class Waveform extends Component {
 
 
     function handleCanvasClick() {
-      window.isPaused = !window.isPaused;
+      isPaused = !isPaused;
 
-      window.isPaused ? cancelAnimationFrame(requestId) : requestAnimationFrame(animate);
+      isPaused ? cancelAnimationFrame(requestId) : requestAnimationFrame(animate);
+
+      onCanvasClick();
     }
 
     function handleResize() {
@@ -163,7 +167,6 @@ class Waveform extends Component {
 
   render() {
     const { loadError } = this.state;
-    const isPaused = window.isPaused;
 
     return (
       <section className="waveform">
