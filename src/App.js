@@ -4,6 +4,8 @@ import Waveform from './components/Waveform';
 import Timer from './components/Timer';
 import CommentsList from './components/CommentsList';
 
+import logoJiminny from './assets/logo-jiminny.png';
+
 import './App.css';
 
 class App extends Component {
@@ -89,7 +91,8 @@ class App extends Component {
     const { isPaused, time, isTimeVisible, comments } = this.state;
 
     return (
-      <div className="App">
+      <div className="app">
+        <img className="logo" src={ logoJiminny } alt="logo" />
         <AddComment
           onAddComment={ this.onAddComment }
           hidden={ !isPaused }

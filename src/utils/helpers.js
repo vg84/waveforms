@@ -1,4 +1,8 @@
 export function parseTime(secs) {
+  if (!secs) {
+    return '00:00';
+  }
+
   if (secs < 3600) {
     const minutes = Math.floor(secs / 60);
     const seconds = secs - (minutes * 60);

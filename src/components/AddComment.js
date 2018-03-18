@@ -20,8 +20,10 @@ class AddComment extends Component {
   }
 
   onCommentSubmit(ev) {
-    if (ev.keyCode === ENTER_KEY_CODE) {
-      this.props.onAddComment( this.state.comment );
+    const { comment } = this.state;
+
+    if (ev.keyCode === ENTER_KEY_CODE && comment.trim().length > 0) {
+      this.props.onAddComment( comment );
       this.setState( () => ({ comment: '' }) );
       document.querySelector('canvas').click();
     }
