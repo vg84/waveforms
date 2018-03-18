@@ -12,15 +12,58 @@
 .comment-input {
   height: 20px;
   padding: 2px;
-  color: darkgrey;
+  color: grey;
 }
 
 .waveform {
-  /* margin-top: 40px; */
   border-color: lightgrey;
   border-style: solid;
   border-left-width: 1px;
   border-right-width: 1px;
   border-top: none;
   border-bottom: none;
+}
+
+.timer-wrapper {
+  min-height: 20px;
+  color: grey;
+  font-size: 14px;
+}
+
+.comments-list-wrapper {
+  align-self: flex-start;
+  margin-left: 20px;
+}
+
+.comments-list-empty {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.comments-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.comment {
+  display: flex;
+  padding: 5px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 5px;
+  color: grey;
+}
+
+.comment:hover {
+  background: lightgrey;
+}
+
+.delete-comment {
+  margin-left: 20px;
+  background: none;
+  border: 1px solid tomato;
+  font-size: 16px;
+  color: tomato;
+  border-radius: 5px;
 }

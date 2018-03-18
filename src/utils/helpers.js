@@ -1,13 +1,9 @@
 export function parseTime(secs) {
-  if (secs < 60) {
-    return `${secs}`;
-  }
-
   if (secs < 3600) {
     const minutes = Math.floor(secs / 60);
     const seconds = secs - (minutes * 60);
 
-    return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
   }
 
   const hours = Math.floor(secs / 3600);
@@ -24,7 +20,7 @@ export function getWaveformLength(talkTimes) {
   if (!talkTimes || !talkTimes.user || !talkTimes.customer) {
     return 0;
   }
-  
+
   const lastUserWave = talkTimes.user.pop()[1];
   const lastCustomerWave = talkTimes.customer.pop()[1];
 
