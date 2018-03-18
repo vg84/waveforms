@@ -98,7 +98,11 @@ class Waveform extends Component {
     function handleCanvasClick() {
       isPaused = !isPaused;
 
-      isPaused ? cancelAnimationFrame(requestId) : requestAnimationFrame(animate);
+      if (isPaused) {
+        cancelAnimationFrame(requestId);
+      } else {
+        requestAnimationFrame(animate);
+      }
 
       onCanvasClick();
     }
@@ -120,6 +124,7 @@ class Waveform extends Component {
   }
 
   draw(i, markerX) {
+    const { onTimeUpdate } = this.props;
     const { talkTimes } = this.state;
     const ctx = this.getCtx();
 
@@ -129,13 +134,17 @@ class Waveform extends Component {
     // draw the user waves
     ctx.fillStyle = 'rgb(253, 107, 176)';
     talkTimes.user.forEach(item => {
-      return ctx.fillRect(item[0] / DIVIDER - i + markerX, USER_Y, (item[1] - item[0]) / DIVIDER, HEIGHT);
+      const userX = item[0] / DIVIDER - i + markerX;
+      const width = (item[1] - item[0]) / DIVIDER;
+      return ctx.fillRect(userX, USER_Y, width, HEIGHT);
     });
 
     // draw the customer waves
     ctx.fillStyle = 'rgb(30, 35, 109)';
     talkTimes.customer.forEach(item => {
-      return ctx.fillRect(item[0] / DIVIDER - i + markerX, CUSTOMER_Y, (item[1] - item[0]) / DIVIDER, HEIGHT);
+      const customerX = item[0] / DIVIDER - i + markerX;
+      const width = (item[1] - item[0]) / DIVIDER;
+      return ctx.fillRect(customerX, CUSTOMER_Y, width, HEIGHT);
     });
 
     // draw the marker line
@@ -146,10 +155,9 @@ class Waveform extends Component {
     ctx.closePath();
     ctx.stroke();
 
-    // draw the elapsed time
-    ctx.fillStyle = 'rgb(0, 0, 0)';
-    ctx.font = '14px serif';
-    ctx.fillText(parseTime(Math.round(i * DIVIDER)), markerX, MARKER_END_Y + 20);
+    // pass the elapsed time to App.js
+    const time = parseTime(Math.round(i * DIVIDER));
+    onTimeUpdate(time);
   }
 
   getCanvasWidth() {
@@ -166,12 +174,15 @@ class Waveform extends Component {
   }
 
   render() {
+    const { onWaveFormMouseEnter, onWaveFormMouseLeave } = this.props;
     const { loadError } = this.state;
 
     return (
       <section className="waveform">
         <canvas
           ref={ canvas => this.canvas = canvas }
+          onMouseEnter={ onWaveFormMouseEnter }
+          onMouseLeave={ onWaveFormMouseLeave }
         >
           Canvas is not supported by your browser
         </canvas>
