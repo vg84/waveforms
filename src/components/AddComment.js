@@ -15,7 +15,6 @@ class AddComment extends Component {
   }
 
   onCommentChange(ev) {
-    // console.log(ev.target.value);
     const comment = ev.target.value;
     this.setState( () => ({ comment }) );
   }
@@ -32,15 +31,18 @@ class AddComment extends Component {
     const { comment } = this.state;
 
     return (
-      <input
-        type="text"
-        value={ comment }
-        hidden={ hidden }
-        placeholder="Add comment..."
-        onChange={ this.onCommentChange }
-        onKeyUp={ this.onCommentSubmit }
-      />
-    )
+      <div className="comment-input-wrapper">
+        <input
+          className="comment-input"
+          type="text"
+          value={ comment }
+          hidden={ hidden }
+          placeholder="Add comment..."
+          onChange={ this.onCommentChange }
+          onKeyUp={ this.onCommentSubmit }
+        />
+      </div>
+    );
   }
 }
 

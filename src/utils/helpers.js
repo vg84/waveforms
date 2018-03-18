@@ -19,3 +19,14 @@ export function parseTime(secs) {
 
   return `${hours}:${minutesString}:${secondsString}`;
 }
+
+export function getWaveformLength(talkTimes) {
+  if (!talkTimes || !talkTimes.user || !talkTimes.customer) {
+    return 0;
+  }
+  
+  const lastUserWave = talkTimes.user.pop()[1];
+  const lastCustomerWave = talkTimes.customer.pop()[1];
+
+  return lastUserWave > lastCustomerWave ? lastUserWave : lastCustomerWave
+}

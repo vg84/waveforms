@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { parseTime } from '../utils/helpers';
+import { parseTime, getWaveformLength } from '../utils/helpers';
 
 import {
   USER_Y,
@@ -24,6 +24,7 @@ class Waveform extends Component {
       handleResize: null,
     };
 
+    this.reqListener = this.reqListener.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.getCtx = this.getCtx.bind(this);
     this.init = this.init.bind(this);
@@ -48,16 +49,36 @@ class Waveform extends Component {
 
   }
 
+  reqListener({ target }) {
+    if (target.status !== 200) {
+      return this.setState( () => ({ loadError: 'Could not load the data. Plese refresh the page.' }) );
+    }
+
+    const data = JSON.parse(target.response);
+    const waveformLength = getWaveformLength(data.talkTimes);
+    this.waveformLength = waveformLength;
+    this.setState( () => ({ talkTimes: data.talkTimes }), this.init() );
+  }
+
   fetchData() {
-    fetch('https://rawgit.com/jiminny/join-the-team/master/assets/wavedata.json')
-      .then( res => res.json() )
-      .then( ({ talkTimes }) => {
-        // TODO: helper func to get the longest waveform and set it to the state
-        this.setState( () => ({ talkTimes }), this.init() );
-      })
-      .catch( () => {
-        this.setState( () => ({ loadError: 'Could not load the data. Plese refresh the page.' }) )
-      });
+
+    // I'd much rather use fetch, but the requirement states to use XHR :)
+
+    // fetch('https://rawgit.com/jiminny/join-the-team/master/assets/wavedata.json')
+    //   .then( res => res.json() )
+    //   .then( ({ talkTimes }) => {
+    //     const waveformLength = getWaveformLength(talkTimes);
+    //     this.waveformLength = waveformLength;
+    //     this.setState( () => ({ talkTimes }), this.init() );
+    //   })
+    //   .catch( () => {
+    //     this.setState( () => ({ loadError: 'Could not load the data. Plese refresh the page.' }) )
+    //   });
+
+    var req = new XMLHttpRequest();
+    req.addEventListener('load', this.reqListener);
+    req.open('get', 'https://rawgit.com/jiminny/join-the-team/master/assets/wavedata.json');
+    req.send();
   }
 
   getCtx() {
@@ -67,6 +88,7 @@ class Waveform extends Component {
   init() {
     const { onCanvasClick } = this.props;
 
+    const waveformLength = this.waveformLength;
     const draw = this.draw;
     const getCanvasWidth = this.getCanvasWidth;
     const setCanvasWidth = this.setCanvasWidth;
@@ -84,8 +106,7 @@ class Waveform extends Component {
     function animate() {
       requestId = requestAnimationFrame(animate);
 
-      // TODO: check the longest waveframe
-      if (i < 1863 / DIVIDER) {
+      if (i < waveformLength / DIVIDER) {
         draw(i, markerX);
 
         i += DIVIDER / FRAME_EQUALIZER;
@@ -155,7 +176,7 @@ class Waveform extends Component {
     ctx.closePath();
     ctx.stroke();
 
-    // pass the elapsed time to App.js
+    // pass the elapsed time up to App.js
     const time = parseTime(Math.round(i * DIVIDER));
     onTimeUpdate(time);
   }
@@ -180,6 +201,7 @@ class Waveform extends Component {
     return (
       <section className="waveform">
         <canvas
+          height="120"
           ref={ canvas => this.canvas = canvas }
           onMouseEnter={ onWaveFormMouseEnter }
           onMouseLeave={ onWaveFormMouseLeave }

@@ -47,11 +47,13 @@ class App extends Component {
   }
 
   onWaveFormMouseEnter() {
+
     this.setState( () => ({ isTimeVisible: true }) );
   }
 
   onWaveFormMouseLeave() {
-    this.setState( () => ({ isTimeVisible: false }) );
+    const { isPaused } = this.state;
+    this.setState( () => ({ isTimeVisible: isPaused ? true : false }) );
   }
 
   render() {

@@ -1,3 +1,26 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.comment-input-wrapper {
+  min-height: 40px;
+}
+.comment-input {
+  height: 20px;
+  padding: 2px;
+  color: darkgrey;
+}
+
+.waveform {
+  /* margin-top: 40px; */
+  border-color: lightgrey;
+  border-style: solid;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-top: none;
+  border-bottom: none;
 }
