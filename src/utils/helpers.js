@@ -25,8 +25,9 @@ export function getWaveformLength(talkTimes) {
     return 0;
   }
 
-  const lastUserWave = talkTimes.user.pop()[1];
-  const lastCustomerWave = talkTimes.customer.pop()[1];
+  const talkTimesObj = JSON.parse( JSON.stringify(talkTimes) );
+  const lastUserWave = talkTimesObj.user.pop()[1];
+  const lastCustomerWave = talkTimesObj.customer.pop()[1];
 
   return lastUserWave > lastCustomerWave ? lastUserWave : lastCustomerWave
 }

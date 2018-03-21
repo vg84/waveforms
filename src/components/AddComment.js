@@ -25,7 +25,6 @@ class AddComment extends Component {
     if (ev.keyCode === ENTER_KEY_CODE && comment.trim().length > 0) {
       this.props.onAddComment( comment );
       this.setState( () => ({ comment: '' }) );
-      document.querySelector('canvas').click();
     }
   }
 

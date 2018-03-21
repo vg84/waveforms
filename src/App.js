@@ -54,10 +54,12 @@ class App extends Component {
 
   onAddComment(comment) {
     const { comments, time } = this.state;
-    const newComments = [ ...comments, `[${time}]     ${comment}` ];
+    const newComments = [ ...comments, `[${time}] ${comment}` ];
 
     this.saveCommentsLocalStorage(newComments);
     this.setState( () => ({ comments: newComments }) );
+
+    document.querySelector('canvas').click();
   }
 
   onDeleteComment(idx) {

@@ -1,6 +1,28 @@
 import React from 'react';
 
 const CommentsList = ({ comments, onDeleteComment }) => {
+
+  const deleteComment = element => {
+    const commentIndex = element.target.dataset.index;
+    onDeleteComment( Number(commentIndex) );
+  };
+
+  const renderComment = (comment, idx) => {
+    return (
+      <li className="comment" key={ idx }>
+        <div>{ comment }</div>
+        <button
+          className="delete-comment"
+          type="button"
+          onClick={ deleteComment }
+          data-index={ idx }
+        >
+          x
+        </button>
+      </li>
+    );
+  }
+
   return (
     <div className="comments-list-wrapper">
       <h3>Comments</h3>
@@ -13,23 +35,7 @@ const CommentsList = ({ comments, onDeleteComment }) => {
       </div>
 
       <ul className="comments-list">
-        {
-          comments.map( (comment, idx) => {
-            const deleteComment = () => onDeleteComment(idx);
-            return (
-              <li className="comment" key={idx}>
-                <div>{ comment }</div>
-                <button
-                  className="delete-comment"
-                  type="button"
-                  onClick={deleteComment}
-                >
-                  x
-                </button>
-              </li>
-            );
-          })
-        }
+        { comments.map( renderComment ) }
       </ul>
     </div>
   );
