@@ -35,7 +35,10 @@ class App extends Component {
   }
 
   onAddComment(comment) {
-    this.props.addComment(comment);
+    const { time } = this.state;
+
+    const commentWithTime = `[${time}] ${comment}`;
+    this.props.addComment(commentWithTime);
     document.querySelector('canvas').click();
   }
 
